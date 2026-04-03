@@ -1,5 +1,5 @@
 import streamlit as st
-from rag_engine import ask
+from backend.rag_engine import ask
 
 st.set_page_config(page_title="FoodGPT", page_icon="🍽️")
 st.title("🍽️ FoodGPT")
