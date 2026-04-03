@@ -1,6 +1,8 @@
-venv/
+.venv/
 __pycache__/
 *.pyc
 index.faiss
 data.pkl
 .env
+data/
+embeddings/
