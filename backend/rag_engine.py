@@ -30,27 +30,30 @@ def retrieve(query: str, top_k: int = 5):
     return results
 
 def build_prompt(query: str, results: list) -> str:
-    context = "\n\n".join(
-        f"- {r['name']} ({r['location']}): {r['cuisines']}, Rating {r['rate']}"
-        for r in results
+    context = "\n".join(
+        f"{i+1}. {r['name']} ({r['location']}) | {r['cuisines']} | Rating: {r['rate']}"
+        for i, r in enumerate(results)
     )
 
     return f"""
-You are FoodGPT, an AI restaurant recommendation assistant.
+You are FoodGPT.
 
-You MUST ONLY use the restaurants provided below.
-Do NOT say you don't have access to data.
-Do NOT mention limitations.
+STRICT RULES:
+- Use ONLY the restaurants below
+- Do NOT add extra text
+- Do NOT explain locations
+- Keep output SHORT
 
 User query: "{query}"
 
 Restaurants:
 {context}
 
-Task:
-- Recommend 2-3 best options
-- Explain WHY they match (cuisine, price, rating)
-- Keep response concise and confident
+Return EXACTLY this format (no extra lines before/after):
+
+1. Name (Location) - short reason
+2. Name (Location) - short reason
+3. Name (Location) - short reason
 """
 
 def ask(query: str):
