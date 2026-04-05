@@ -3,10 +3,18 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 import ollama
 import json
-
+from fastapi.middleware.cors import CORSMiddleware
 from rag_engine import retrieve, build_prompt
 
 app = FastAPI()
+
+# Allow CORS for frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/")
@@ -24,9 +32,13 @@ def stream_response(query: str):
         stream=True
     )
 
+    buffer = ""
+
     for chunk in stream:
         token = chunk["message"]["content"]
-        yield f"data: {json.dumps({'token': token})}\n\n"
+        buffer += token
+
+        yield f"data: {json.dumps({'token': buffer})}\n\n"
 
     # Send structured results at end
     yield f"data: {json.dumps({'results': results})}\n\n"
