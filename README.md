@@ -4,15 +4,10 @@ AI-powered restaurant discovery system that understands natural language queries
 
 ---
 
-## 🚀 Demo
-
-![App Screenshot](./assets/ui.png)
-
----
 
 ## 🧠 How It Works
 
-![Architecture](./assets/architecture.png)
+<img width="765" height="556" alt="image" src="https://github.com/user-attachments/assets/7dcae22a-1412-462a-9cb5-c06a45d2e6e1" />
 
 ---
 
@@ -52,14 +47,11 @@ foodgpt/
 │   │── main.py
 │   │── rag_engine.py
 │   │── embeddings/
+│   │── data/
+│   │── build_index.py
 │
 │── frontend/
 │   │── app/
-│
-│── data/
-│   │── zomato.csv
-│
-│── build_index.py
 ```
 
 ---
