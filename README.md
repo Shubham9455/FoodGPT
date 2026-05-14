@@ -15,7 +15,7 @@ AI-powered restaurant discovery system that understands natural language queries
 
 * 🔍 Natural language search (e.g. *"cheap chicken under ₹300"*)
 * ⚡ Semantic search using FAISS + sentence-transformers
-* 🤖 LLM-powered responses using Ollama (Mistral / LLaMA3)
+* 🤖 LLM-powered responses using Ollama ([Phi / LLaMA3](https://ollama.com/library/phi3))
 * 🔄 Real-time streaming responses (SSE)
 * 💬 ChatGPT-style UI (Next.js)
 * 🍽️ Structured restaurant cards (name, rating, cuisine, location)
