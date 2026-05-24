@@ -55,8 +55,6 @@ User query:
 
 
 def retrieve(query:str, top_k=5):
-
-    # LLM rewrites query
     optimized_query = rewrite_query(query)
 
     print(f"\nOriginal: {query}")
