@@ -7,7 +7,9 @@ AI-powered restaurant discovery system that understands natural language queries
 
 ## 🧠 How It Works
 
-<img width="765" height="556" alt="image" src="https://github.com/user-attachments/assets/7dcae22a-1412-462a-9cb5-c06a45d2e6e1" />
+<!-- <img width="765" height="556" alt="image" src="https://github.com/user-attachments/assets/7dcae22a-1412-462a-9cb5-c06a45d2e6e1" /> -->
+<img width="1448" height="1086" alt="image" src="https://github.com/user-attachments/assets/d6d9f58c-080b-482d-87dc-6a1cc51dd3ab" />
+
 
 ---
 
