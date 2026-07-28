@@ -1,10 +1,10 @@
-from backend.state import GraphState
+from state import GraphState
 
 
 def build_prompt_node(state: GraphState) -> GraphState:
-    """Build the prompt for the LLM using retrieved restaurant data."""
+    """Build the prompt for the LLM using reranked restaurant data."""
     query = state["original_query"]
-    results = state["retrieved_docs"]
+    results = state["reranked_docs"]
 
     context = "\n".join(
         f"{i+1}. {r['name']} ({r['location']}) | {r['cuisines']} | Rating: {r['rate']}"

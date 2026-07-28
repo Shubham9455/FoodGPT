@@ -2,7 +2,9 @@ import pandas as pd
 import faiss
 import pickle
 import numpy as np
+import json
 from sentence_transformers import SentenceTransformer
+from rank_bm25 import BM25Okapi
 
 df = pd.read_csv("data/zomato.csv", encoding="latin-1")
 df = df.dropna(subset=["name", "cuisines", "rate", "location"])
@@ -20,16 +22,30 @@ def build_chunk(row):
 df["chunk"] = df.apply(build_chunk, axis=1)
 chunks = df["chunk"].tolist()
 
+# ── Dense embeddings (FAISS) ──
 model = SentenceTransformer("all-MiniLM-L6-v2")
 embeddings = model.encode(chunks, show_progress_bar=True, batch_size=64)
 embeddings = np.array(embeddings).astype("float32")
 
-# Build FAISS index
 index = faiss.IndexFlatL2(embeddings.shape[1])
 index.add(embeddings)
 
 faiss.write_index(index, "embeddings/faiss_index.bin")
-with open("embeddings/metadata.pkl", "wb") as f:
-    pickle.dump(df[["name", "location", "cuisines", "rate", "chunk"]].to_dict("records"), f)
 
-print(f"Indexed {len(chunks)} restaurants.")
+# ── Sparse embeddings (BM25) ──
+tokenized_chunks = [chunk.lower().split() for chunk in chunks]
+bm25 = BM25Okapi(tokenized_chunks)
+
+# Save BM25 index data (corpus + parameters)
+with open("embeddings/bm25_corpus.pkl", "wb") as f:
+    pickle.dump({
+        "tokenized_corpus": tokenized_chunks,
+        "corpus": chunks,
+    }, f)
+
+# ── Metadata ──
+metadata_records = df[["name", "location", "cuisines", "rate", "chunk"]].to_dict("records")
+with open("embeddings/metadata.pkl", "wb") as f:
+    pickle.dump(metadata_records, f)
+
+print(f"Indexed {len(chunks)} restaurants (dense FAISS + sparse BM25).")

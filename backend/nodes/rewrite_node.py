@@ -1,5 +1,5 @@
 import ollama
-from backend.state import GraphState
+from state import GraphState
 
 REWRITE_PROMPT = """
 You are a restaurant search optimizer.

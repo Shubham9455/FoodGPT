@@ -1,4 +1,4 @@
-from backend.state import GraphState
+from state import GraphState
 
 
 def fallback_node(state: GraphState) -> GraphState:

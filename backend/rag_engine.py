@@ -5,8 +5,8 @@ This module maintains backward compatibility with the original API
 while internally using a LangGraph pipeline for orchestration.
 """
 
-from backend.graph import foodgpt_graph
-from backend.state import GraphState
+from graph import foodgpt_graph
+from state import GraphState
 
 
 def ask(query: str):

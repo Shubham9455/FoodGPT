@@ -1,5 +1,5 @@
 import ollama
-from backend.state import GraphState
+from state import GraphState
 
 
 def generate_node(state: GraphState) -> GraphState:
