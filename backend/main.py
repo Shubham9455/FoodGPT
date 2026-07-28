@@ -1,10 +1,8 @@
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
-from pydantic import BaseModel
-import ollama
 import json
 from fastapi.middleware.cors import CORSMiddleware
-from rag_engine import retrieve, build_prompt
+from rag_engine import ask, stream_graph
 
 app = FastAPI()
 
@@ -23,22 +21,14 @@ def root():
 
 
 def stream_response(query: str):
-    results = retrieve(query)
-    prompt = build_prompt(query, results)
+    """Legacy streaming endpoint - now backed by LangGraph pipeline."""
+    answer, results = ask(query)
 
-    stream = ollama.chat(
-        model="phi",
-        messages=[{"role": "user", "content": prompt}],
-        stream=True
-    )
-
+    # Simulate token streaming by yielding the full answer
     buffer = ""
-
-    for chunk in stream:
-        token = chunk["message"]["content"]
-        buffer += token
-
-        yield f"data: {json.dumps({'token': buffer})}\n\n"
+    for token in answer.split():
+        buffer += token + " "
+        yield f"data: {json.dumps({'token': buffer.strip()})}\n\n"
 
     # Send structured results at end
     yield f"data: {json.dumps({'results': results})}\n\n"
@@ -48,5 +38,21 @@ def stream_response(query: str):
 def stream(query: str):
     return StreamingResponse(
         stream_response(query),
+        media_type="text/event-stream"
+    )
+
+
+def langgraph_stream_response(query: str):
+    """Stream LangGraph node-level events as SSE."""
+    for event in stream_graph(query):
+        # Each event is a dict like {"node_name": {"field": "value", ...}}
+        yield f"data: {json.dumps({'event': event})}\n\n"
+
+
+@app.get("/langgraph/stream")
+def langgraph_stream(query: str):
+    """New endpoint that streams LangGraph node execution events."""
+    return StreamingResponse(
+        langgraph_stream_response(query),
         media_type="text/event-stream"
     )
